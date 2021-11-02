@@ -20,5 +20,18 @@
 	<bean class="day1.BoardDao" id="boardDao">
 		<property name="dbFactory" value="마이바티스"/>
 	</bean>
+	<!-- scope 기본값은 singleton -->
+	<bean class="day1.Singer" id="singer" scope="prototype">
+		<property name="idx" value="12"/>
+		<property name="singer" value="트와이스"/>
+		<property name="albums">
+			<list>
+				<value>첫번째 싱글</value>
+				<value>두번째 정규</value>
+				<value>세번째 미니</value>
+			</list>
+			
+		</property>
+	</bean>
 
 </beans>
