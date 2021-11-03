@@ -11,8 +11,6 @@ public class MemberServiceMyImpl implements MemberService {
 	@Autowired
 	private MemberDao dao;
 	
-	public MemberServiceMyImpl() {//@Autowired 하려면 기본 생성자 필요
-	}
 
 	//의존성 주입을 생성자로 한다.
 	public MemberServiceMyImpl(MemberDao dao) {
