@@ -21,6 +21,7 @@
  	<li><a href="/day3">/day3</a></li>
  	<li><a href="test">homecontroller test</a></li>
  	<li><a href="hello">homecontroller hello</a></li>
+ 	<li><a href="form">homecontroller form 입력</a></li>
  </ul>
  <ul>
  	<li><a href=""></a></li>
