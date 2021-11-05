@@ -33,16 +33,19 @@ public class FreeboardController {
 	
 	@Autowired
 	CommentService  cmtservice;
+	 //http://localhost:8082/board/community 또는
+	//http://localhost:8082/board/community/list 와 매핑됨
+
 	
-	//게시판 리스트 보기(검색기능 포함)
-	@RequestMapping(value={"/","/list"}) // "/" 표시가 jsp에서 request.getContextPath
-	public void pageList(@RequestParam Map<String, String> param,Model model) { //String page,String field,String findText,Model model) {
+	
+	//게시판 리스트 보기(검색기능 포함) 	request mapping을 여러 url 요청으로 할 수 있다 value가 배열
+	@RequestMapping(value={"/","/list"})
+	public String pageList(@RequestParam Map<String, Object> param,Model model) { //String page,String field,String findText,Model model) {
 		logger.info("**freeboard list 출력합니다.");
-		
 		int currentPage;//현재 페이지
 		List<Board> list;
 		int totalCount; int pageSize=10;
-		String page=param.get("page");
+		String page=(String) param.get("page");
 		if(page==null || page.trim().length()==0) currentPage = 1;
 		else currentPage = Integer.parseInt(page);   //page파라미터가 숫자로 넘어온경우만 실행. 
 		
@@ -51,8 +54,8 @@ public class FreeboardController {
 		PageDto pageDto;
 		//검색 기능사용할 때 검색필드와 검색키워드 뷰에 전달한다.
 
-		String findText = param.get("findText");
-		String field=param.get("field");
+		String findText = (String) param.get("findText");
+		String field=(String) param.get("field");
 		
 		totalCount=service.searchCount(param);   //서비스 메소드 타입 변경예정
 		pageDto=new PageDto(currentPage, pageSize, totalCount, field, findText);
@@ -63,9 +66,19 @@ public class FreeboardController {
 		map.put("page", pageDto);			//view에게 전달할 모델객체 설정
 		map.put("list",list);				//          "
 		model.addAllAttributes(map);	//위에 4개의 put 실행한 map객체를 애트리뷰트에 저장한다.
+		
+		return "community/list";
 	}  //view 이름은? list.jsp
 	
 	
+	//페이지 리스트 만드는 부분을 서비스로 이동시키는 예제
+	@RequestMapping(value = "/list2")
+	public String list2(@RequestParam Map<String, Object> param,Model model) {
+		//컨트롤러는 요청에 대한 데이터 처리를 서비스로 전달하고 결과를 리턴받으면
+		//모델에 저장해서 view로 전달한다.
+		model.addAllAttributes(service.searchList2(param));
+		return "community/list";
+	}
 	
 	
 	
