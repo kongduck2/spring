@@ -58,10 +58,9 @@
 		if(yn){
 			alert('글 ' + idx +'를 삭제합니다.');
 			//수정해야 실행됩니다.
-			location.href='deleteAction.jsp?func=2&idx='+idx+'&page='+cpage;
+			location.href='delete?idx='+idx+'&page='+cpage;
 		}
 	}
-
 </script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/freeboard.css">  <!-- 상대경로 ../ 한단계 위로 -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal1.css">
@@ -90,20 +89,19 @@
  		<pre>${bean.content }</pre></div></td>   <!-- 엔터,탭,기호 등 텍스트 그대로 출력할 때 사용 -->
  	</tr>
  	<tr><td colspan="4" align="center"><br>
- 	<a class="button" href="update?func=view&idx=${bean.idx }&page=${page}">수정</a>
+ 	<a class="button" href="update?idx=${bean.idx }&page=${page}&field=${field}&findText=${findText}">수정</a>
  	<a class="button" onclick="javascript:deleteOk(${bean.idx },${page });">삭제</a>
- 	<a class="button" href="list?page=${page }">목록</a><br><br><br>
+ 	<a class="button" href="list?page=${page }&field=${field}&findText=${findText}">목록</a><br><br><br>
  	</td></tr>
  </table>
  <!-- 메인글 출력 끝 -->
  <!-- 댓글 시작 -->
  <!-- 댓글 입력 -->
- <form action="comment?action=insert" method="post" name="frmCmt"><!-- 댓글 입력  , 추가 : 댓글수정과 삭제 -->
+ <form action="comment?action=insert&page=${page}" method="post" name="frmCmt"><!-- 댓글 입력  , 추가 : 댓글수정과 삭제 -->
  <input type="hidden" name="func" value="1">   <!-- 기본값은 댓글 입력 , 수정:2 ,삭제:3 -->
  <!-- CommentDTO 변수명과 일치하도록 name 속성 설정 그래야 Controller Model객체로 전달됩니다. -->
  <input type="hidden" name="idx" value="0">  <!-- 댓글의 PK(기본키) 컬럼 값 : 댓글 수정을 위해서만 사용 -->
  <input type="hidden" name="mref" value="${bean.idx}">  <!-- 메인글의 idx -->
- <input type="hidden" name="page" value="${page}">   <!-- 현재글의 페이지번호 -->
  <table style="width:60%;margin: auto;">
  	<tr><td colspan="4">댓글 갯수 : ${bean.commentCount }    
  		<input type="button" onclick="window.location.reload()" value="새로고침" class="btn-small">
@@ -191,7 +189,6 @@
 <script type="text/javascript">
 var modal = document.getElementById('myModal');
 var span = document.getElementsByClassName("close")[0];
-
 span.onclick = function() {
 modal.style.display = "none";	//modal 화면에 안보이기	닫기 기능 구현
 }
@@ -200,12 +197,3 @@ modal.style.display = "none";	//modal 화면에 안보이기	닫기 기능 구�
  
 </body>
 </html>
-
-
-
-
-
-
-
-
-

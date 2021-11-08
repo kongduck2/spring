@@ -25,9 +25,10 @@ public class CommentController {
 		if(func==1) {
 			//댓글 idx는 자동증가 컬럼
 			service.insert(comt);
-		//	service.updateCommentCntInc(comt.getMref());		//댓글갯수 1증가 테이블 컬럼 업데이트
+			service.updateCountAll(comt.getMref());
+			//	service.updateCommentCntInc(comt.getMref());		//댓글갯수 1증가 테이블 컬럼 업데이트
 		}else if (func==2){
-	//		service.update(comt.getIdx(),comt.getContent());
+			service.update(comt.getIdx(),comt.getContent());
 		}
 		model.addAttribute("idx", comt.getMref());
 		model.addAttribute("page", page);
@@ -38,15 +39,10 @@ public class CommentController {
 	@RequestMapping(params="action=delete")
 	public String delete(int idx,int page,int mref,Model model) {
 		service.delete(idx);    //댓글 번호
-
+		service.updateCountAll(mref);
 		model.addAttribute("idx", mref);    //메인글번호
 		model.addAttribute("page", page);
 		return "redirect:/community/detail";
 	}
 	
 }
-
-
-/*
-http://www.objectaid.com/update/current
-*/

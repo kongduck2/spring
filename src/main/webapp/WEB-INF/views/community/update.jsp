@@ -16,10 +16,11 @@ function post_data() {
 <body>
 <h3>동아리 커뮤니티 글 수정</h3>
 <hr>
-<form name="frm1" method="post" action="updateAction.jsp">
- 
+<form name="frm1" method="post" action="update">
  <input type="hidden" name="idx" value="${bean.idx }">
- <input type="hidden" name="pno" value="${pno }">
+ <input type="hidden" name="page" value="${page}">
+ <input type="hidden" name="field" value="${field }">
+ <input type="hidden" name="findText" value="${findText }">
  <table>
  	<tr><td width="25%" class="td1">제목</td>
  		<td><input type="text" name="subject" value="${bean.subject}" size="70" class="input1" required="required"></td>
@@ -38,7 +39,7 @@ function post_data() {
  	<input type="submit" value="저장" class="btnGreen">
  	<!-- <a class="button" href="javascript:post_data();">저장</a> -->
  	<input type="reset" class="btnGreen" value="다시쓰기">
- 	<input type="button" class="btnGreen" onclick="location.href='list?page=${page}'" value="목록">
+ 	<input type="button" class="btnGreen" onclick="location.href='list?page=${page}&field=${field}$findText=${findText}'" value="목록">
  	</td></tr>
  </table>
  </form>

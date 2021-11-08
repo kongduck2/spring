@@ -1,6 +1,8 @@
 package com.jcpdev.board.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,8 +34,11 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public int update(int idx) {
-		return cdao.update(idx);
+	public int update(int idx,String content) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("idx", idx);
+		map.put("content", content);
+		return cdao.update(map);
 	}
 
 	@Override
@@ -41,6 +46,10 @@ public class CommentServiceImpl implements CommentService{
 		return cdao.delete(idx);
 	}
 	
-	
+	@Override
+	public void updateCountAll(int idx) {
+		// TODO Auto-generated method stub
+		cdao.updateCountAll(idx);
+	}
 	
 }

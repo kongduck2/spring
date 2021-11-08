@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jcpdev.board.model.Board;
+import com.jcpdev.board.model.Comment;
 import com.jcpdev.board.model.PageDto;
 import com.jcpdev.board.service.CommentService;
 import com.jcpdev.board.service.FreeboardService;
 
 @Controller
-@RequestMapping("/community")
+@RequestMapping("/community") //위에다 맵핑 써놓으면 view 폴더명 동일할때 생략 , 리다이렉트 community 생략 가능
 public class FreeboardController {
 	private static final Logger logger = LoggerFactory.getLogger(FreeboardController.class);
 	
@@ -85,7 +86,19 @@ public class FreeboardController {
 	
 	//상세보기 : 미구현
 	@RequestMapping("/detail")     
-	public void detail() {
+	public void detail(@RequestParam Map<String, Object> param , Model model) {
+		//받는곳
+		int idx = Integer.parseInt((String) param.get("idx"));
+		int mref = idx;
+		Board bean = service.getBoardOne(idx);
+		List<Comment> cmtlist = (List<Comment>) cmtservice.commentList(mref);
+		
+		//주는곳
+		param.put("bean", bean); //인자로 받은 맵에 추가
+		param.put("cmtlist", cmtlist);
+		param.put("cr", "\n");
+		model.addAllAttributes(param);	
+
 	
 	}
 	
@@ -98,18 +111,44 @@ public class FreeboardController {
 	//글쓰기 - 저장   : save()메소드  리다이렉트 list로.
 	@RequestMapping(value="/save")
 	public String save(@ModelAttribute Board board) {
+	//@ModelAttribute 생략 가능 : form 입력 -> @ModelAttribute -> 컨트롤러
 		service.insert(board);
 		
 		return "redirect:/community/list";
+		// redirect할 때 , /가 없으면 현재 경로에서 접근
+		// /가 있으면 contextPath /board 에서 시작
+		// "redirect:community/list" 는 오류
+		// "redirect:/community/list" 는 정상
 	}
 	
 	//수정
-	@RequestMapping(value = "update", method = RequestMethod.GET)
+	@RequestMapping(value = "update", method = RequestMethod.GET) //update.jsp 로 들어갈때
 	public void update(@RequestParam Map<String, String> param,Model model) {		//@RequestParam Map<String, String> param
 		model.addAttribute("bean", service.getBoardOne(Integer.parseInt(param.get("idx"))));
+		model.addAttribute("page",param.get("page"));
+		model.addAttribute("field",param.get("field"));
+		model.addAttribute("findText",param.get("findText"));
+	}
+	
+	//수정 내용 저장
+	@RequestMapping(value = "update" , method = RequestMethod.POST) //update.jsp에서 수정 저장할때
+	public String save2(@ModelAttribute Board board,int idx,int page,String field,String findText, Model model) {//@ModelAttribute 생략됨
+		service.update(board);
+		model.addAttribute("idx",idx);
+		model.addAttribute("page",page);
+		model.addAttribute("field",field);
+		model.addAttribute("findText",findText);
+		return "redirect:list";
 	}
 	
 	//삭제 : 미구현
+	@RequestMapping(value="delete")
+	public String delete(@RequestParam Map<String,Object> param,Model model) {
+		service.delete(Integer.parseInt((String)param.get("idx")));
+		//model.addAttribute("page", page);
+		model.addAllAttributes(param);
+		return "redirect:list";
+	}
 	
 	@ExceptionHandler(NumberFormatException.class)
 	public ModelAndView handleErr(HttpServletRequest request ) {
