@@ -14,6 +14,8 @@
 <hr/>
 <a href="community/list">커뮤니티</a>
 <a href="community/list2">커뮤니티2 컨트롤러 서비스 수정 테스트</a>
+<hr>
+<a href="gallery/gallery">갤러리</a>
 
 <c:if test="${sessionScope.customer != null }"> <!-- customer는 세션애트리뷰트 -->
 	<h3>${sessionScope.customer.name }님(${sessionScope.customer.email }) 환영합니다</h3><br>

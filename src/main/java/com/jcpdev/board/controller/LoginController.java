@@ -1,7 +1,5 @@
 package com.jcpdev.board.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +22,12 @@ public class LoginController {
 	
 	
 	@RequestMapping(value = "login",method = RequestMethod.GET)
-	public String login() {
-		
+	public String login(String alert,Model model) {
+		if(alert != null && alert.equals("y")) {
+			model.addAttribute("message","로그인이 필요합니다.");
+			model.addAttribute("url","login");
+			return "alertLogin";
+		}
 		return "login"; //로그인 버튼 -> login.jsp(뷰) - > 로그인정보 입력후 버튼 ->
 	}
 	

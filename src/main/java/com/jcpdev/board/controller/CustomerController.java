@@ -27,7 +27,7 @@ import com.jcpdev.board.service.CustomerService;
  */
 @Controller
 @RequestMapping("/customer")
-@SessionAttributes(names={"join"})
+@SessionAttributes(names={"join","customer"})
 public class CustomerController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
@@ -99,17 +99,17 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value="update",method=RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute Customer mod_cus,Model model,SessionStatus status){
+	public String save(@ModelAttribute Customer mod_cus,Model model){
 		
 		service.update(mod_cus);
 		System.out.println(mod_cus);
-		ModelAndView mv = new ModelAndView();
+		/*ModelAndView mv = new ModelAndView();
 		mv.addObject("alert", "");
 		mv.addObject("customer", mod_cus);
-		mv.setViewName("customer/update");		//경로 안하면 오류. default 전달할 때와 다르니 주의
-		//status.setComplete();
-		//model.addAttribute("customer", mod_cus);
-		return mv;
+		mv.setViewName("customer/update");		//경로 안하면 오류. default 전달할 때와 다르니 주의*/
+		model.addAttribute("alert","");
+		model.addAttribute("customer",mod_cus);
+		return "redirect:detail";
 	}
 	
 	@RequestMapping(value="delete")

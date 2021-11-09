@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,27 +87,46 @@ public class FreeboardController {
 	
 	
 	
-	//상세보기 : 미구현
 	@RequestMapping("/detail")     
-	public void detail(@RequestParam Map<String, Object> param , Model model) {
+	//public void detail(@RequestParam Map<String, Object> param , Model model) {
+		public String detail(@RequestParam Map<String, Object> param , Model model
+				,HttpServletResponse response
+				,@CookieValue(name="read",defaultValue = "abcde") String readidx) {
+		//읽어올 쿠키이름은 read 쿠키 값이 없다면 기본값 "abcde" 
+		//쿠키값을 저장할 변수는 readidx default값이 없으면 처음실행시 쿠키값없어서 오류남
+		
 		//받는곳
 		int idx = Integer.parseInt((String) param.get("idx"));
 		int mref = idx;
 		Board bean = service.getBoardOne(idx);
 		List<Comment> cmtlist = (List<Comment>) cmtservice.commentList(mref);
 		
+		if(!readidx.contains(String.valueOf(idx))) {//idx 정수값을 String으로 변환
+			//읽지 않은 글
+			readidx += "/" + idx;	//idx가 캐스팅되는 것은 아님
+			//조회수 증가 메소드
+			service.updateReadCnt(idx);
+		}
+		
+		//쿠키값 없었을 때 또는 새로 변경되었을 때
+		Cookie cookie = new Cookie("read",readidx);
+		//쿠키 유효시간 설정, 쿠키 경로 설정
+		cookie.setMaxAge(60*30);	//초 단위, 30분 설정
+		cookie.setPath("/board");
+		response.addCookie(cookie);	//기존 쿠키 정보에 쿠키 항목 추가
+		//쿠키가 HttpOnly 속성을 true -> 클라이언트 단에서는 쓰기 안됨. secure 속성은 암호화해서 전송 https 프로토콜 통신으로만 사용
 		//주는곳
 		param.put("bean", bean); //인자로 받은 맵에 추가
 		param.put("cmtlist", cmtlist);
 		param.put("cr", "\n");
 		model.addAllAttributes(param);	
 
-	
+		return "community/detail";
 	}
 	
 	//글쓰기 - view  : insert() 메소드 
 	@RequestMapping(value="/insert")
-	public void insert(int page,Model model) {
+	public void insert(int page, Model model) {
 		model.addAttribute("page", page);
 	}  //view이름은 insert
 	
@@ -141,7 +163,6 @@ public class FreeboardController {
 		return "redirect:list";
 	}
 	
-	//삭제 : 미구현
 	@RequestMapping(value="delete")
 	public String delete(@RequestParam Map<String,Object> param,Model model) {
 		service.delete(Integer.parseInt((String)param.get("idx")));

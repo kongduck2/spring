@@ -56,7 +56,6 @@ public class FreeBoardServiceImpl implements FreeboardService{
 	@Override
 	public void updateReadCnt(int idx) {
 		dao.updateReadCnt(idx);
-		
 	}
 	@Override
 	public int searchCount(Map<String,Object> map) {

@@ -20,29 +20,29 @@ public class UserInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object arg2, Exception arg3)
 			throws Exception {
-		log.info("3.view 생성까지 완료 후에");   //후처리
-		log.info("-" + arg2);
-		log.info("-" + arg3);
+		//log.info("3.view 생성까지 완료 후에");   //후처리
+		//log.info("-" + arg2);
+		//log.info("-" + arg3);
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object arg2, ModelAndView arg3)
 			throws Exception {
-		log.info("2.hadler method 실행 완료, view를 생성하기 전에.");   //전처리2
-		log.info("-" + arg2);
-		log.info("-" + arg3);
+		//log.info("2.hadler method 실행 완료, view를 생성하기 전에.");   //전처리2
+		//log.info("-" + arg2);
+		//log.info("-" + arg3);
 	}
 
 	//특정 url은 로그인이 되었는지 검사하여 로그인 되었을 때는 return true;
 	//								로그인 안되있으면 return false;후 로그인url 이동
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-		  log.info("1.handler method 매핑 이전에 실행.");   //전처리1
-		  log.info("-" + arg2);
+		  //log.info("1.handler method 매핑 이전에 실행.");   //전처리1
+		 // log.info("-" + arg2);
 		  String reqUrl = request.getServletPath();    //클라이언트요청 url 확인을 위한 출력
-		  log.info("///////" + reqUrl); 
+		 // log.info("///////" + reqUrl); 
 		  reqUrl = request.getRequestURL().toString();
-		  log.info("///////" + reqUrl); 
+		//  log.info("///////" + reqUrl); 
 		  return true;
 	}	
 

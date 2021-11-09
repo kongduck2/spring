@@ -23,7 +23,8 @@ function post_data() {
  		<td class="left"><input type="text" name="subject" size="70" class="input1" required="required"></td>
  	</tr>
  	<tr><td class="td1">작성자</td>
- 		<td class="left"><input type="text" name="name" size="70" class="input1" required="required"></td>
+ 		<td class="left"><input type="text" name="name" size="70" class="input1" required="required"
+ 		 value="${customer.name}" readonly></td>
  	</tr>
  	
  	<tr><td class="td1">글 비밀번호</td>
